@@ -14,7 +14,7 @@ pipeline {
                 // sh "docker tag react-dev 412857254796.dkr.ecr.us-east-1.amazonaws.com/react-dev:latest"
                 // sh "docker tag node-dev 412857254796.dkr.ecr.us-east-1.amazonaws.com/node-dev:latest"
 		dir("app1") {
-			docker build -t my-nginx . 
+			sh "docker build -t my-nginx . "
 			}
             }
         }
