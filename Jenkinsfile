@@ -25,8 +25,8 @@ pipeline {
             steps {
                 echo '=== Pushing Docker Image ==='
                 script {
-                    GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-                    SHORT_COMMIT = "${GIT_COMMIT_HASH[0..7]}"
+                   // GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                    //SHORT_COMMIT = "${GIT_COMMIT_HASH[0..7]}"
                     docker.withRegistry('', 'dockerHubCredentials') {
                         sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 412857254796.dkr.ecr.us-east-1.amazonaws.com"
 			sh "docker tag my-nginx:latest 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest"
