@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build Docker Image') {
           //  when {
-            //    branch 'master'
+            // //    branch 'master'
           //  }
             steps {
                 echo '=== Building Docker Image ==='
