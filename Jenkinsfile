@@ -46,6 +46,7 @@ pipeline {
                 echo '=== Deploy to EKS Cluster ==='
 		sh "aws eks update-kubeconfig --name sat --region us-east-1"
 		sh "kubectl create deployment nginx --image=412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest"
+                sh 'printenv'
             }
         }
     }
