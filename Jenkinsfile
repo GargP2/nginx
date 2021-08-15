@@ -11,10 +11,10 @@ pipeline {
             steps {
                 echo '=== Building Docker Image ==='
                 // sh "docker-compose build"
-                // sh "docker tag react-dev 412857254796.dkr.ecr.us-east-1.amazonaws.com/react-dev:latest"
-                // sh "docker tag node-dev 412857254796.dkr.ecr.us-east-1.amazonaws.com/node-dev:latest"
+                // sh "docker tag react-dev 412857254796.dkr.ecr.us-east-1.amazonaws.com/react-dev:${env.BUILD_TAG}"
+                // sh "docker tag node-dev 412857254796.dkr.ecr.us-east-1.amazonaws.com/node-dev:${env.BUILD_TAG}"
 		dir("app1") {
-			sh "docker build -t my-nginx . "
+			sh "docker build -t my-nginx:${env.BUILD_TAG} . "
 			}
             }
         }
@@ -29,8 +29,8 @@ pipeline {
                     //SHORT_COMMIT = "${GIT_COMMIT_HASH[0..7]}"
                   //  docker.withRegistry('', 'dockerHubCredentials') {
                         sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 412857254796.dkr.ecr.us-east-1.amazonaws.com"
-			sh "docker tag my-nginx:latest 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest"
-                        sh "docker push 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest"
+			sh "docker tag my-nginx:${env.BUILD_TAG} 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:${env.BUILD_TAG}"
+                        sh "docker push 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:${env.BUILD_TAG}"
                    // }
                 }
             }
@@ -38,14 +38,15 @@ pipeline {
         stage('Remove local images') {
             steps {
                 echo '=== Delete the local docker images ==='
-                 sh("docker rmi -f my-nginx:latest 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest || :")
+                 sh("docker rmi -f my-nginx:${env.BUILD_TAG} 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:${env.BUILD_TAG} || :")
             }
         }
         stage('Deploy to EKS') {
             steps {
                 echo '=== Deploy to EKS Cluster ==='
 		sh "aws eks update-kubeconfig --name sat --region us-east-1"
-		sh "kubectl create deployment nginx --image=412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest"
+		sh "kubectl create ns ${env.BUILD_TAG}"
+		sh "kubectl create deployment nginx --image=412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:${env.BUILD_TAG} -n ${env.BUILD_TAG}"
                 sh 'printenv'
             }
         }
