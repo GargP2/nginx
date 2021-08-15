@@ -29,7 +29,7 @@ pipeline {
                     SHORT_COMMIT = "${GIT_COMMIT_HASH[0..7]}"
                     docker.withRegistry('', 'dockerHubCredentials') {
                         sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 412857254796.dkr.ecr.us-east-1.amazonaws.com"
-			docker tag my-nginx:latest 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest
+			sh "docker tag my-nginx:latest 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest"
                         sh "docker push 412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:latest"
                     }
                 }
