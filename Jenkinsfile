@@ -48,7 +48,7 @@ pipeline {
 		sh "kubectl create ns ${env.BUILD_TAG}"
                 sh "kubectl apply -f nginx.yaml -n ${env.BUILD_TAG}"
 		// #sh "kubectl create deployment nginx --image=412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:${env.BUILD_TAG} -n ${env.BUILD_TAG}"
-		sh "kubectl set image deployment/nginx nginx=412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:${env.BUILD_TAG} -n ${env.BUILD_TAG}"`
+		sh "kubectl set image deployment/nginx nginx=412857254796.dkr.ecr.us-east-1.amazonaws.com/my-nginx:${env.BUILD_TAG} -n ${env.BUILD_TAG}"
                 sh 'printenv'
             }
         }
